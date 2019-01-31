@@ -1,22 +1,28 @@
-package trie;
+
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-public class RegistrationSystem {
+public class TestClass {
 	
 	static Trie root = new Trie(null);
+	static BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		
-		BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
 		int users = Integer.parseInt(lector.readLine());
 		for (int i = 0; i < users; i++) {
 			String userName = lector.readLine();
-			System.out.print(userName);
+			bw.write(userName);
+			//System.out.print(userName);
 			addUser(userName);
 		}
+		lector.close();
+		bw.close();
 	}
 	
 	static void update (Trie trie) {
@@ -35,7 +41,7 @@ public class RegistrationSystem {
 		}
 	}
 	
-	static void addUser (String userName) {
+	static void addUser (String userName) throws IOException {
 		Trie actualTrie = root;
 		int userLength = userName.length();
 		for (int i = 0; i < userLength; i++) {
@@ -55,7 +61,8 @@ public class RegistrationSystem {
 		if (!actualTrie.set) {
 			actualTrie.set = true;
 			update (actualTrie);
-			System.out.println();
+			bw.write("\n");
+			//System.out.println();
 			return;
 		} else {
 			
@@ -66,15 +73,16 @@ public class RegistrationSystem {
 						child = child == null? new Trie(actualTrie) : child;
 						child.set = true;
 						actualTrie.childs [i] = child;
-						System.out.println(i);
+						bw.write(i + "\n");
+						//System.out.println(i);
 						update (child);
 						return;
 					}
 				}
 			} else {
 				int min = Integer.MAX_VALUE;
-				int indexMin = -1;
-				for (int i = 9; i >= 0; i--) {
+				int indexMin = Integer.MAX_VALUE;
+				for (int i = 9; i > 0; i--) {
 					Trie child = actualTrie.childs[i];
 					if (child == null || child.minPath <= min) {
 						child = child == null? new Trie(actualTrie) : child;
@@ -83,29 +91,30 @@ public class RegistrationSystem {
 						indexMin = i;
 					}
 				}
-				System.out.print(indexMin);
+				bw.write(indexMin);
+				//System.out.print(indexMin);
 				actualTrie = actualTrie.childs[indexMin];
 				min = Integer.MAX_VALUE;
-				indexMin = -1;
+				indexMin = Integer.MAX_VALUE;
 				while (actualTrie.minPath != 0) {
 					for (int i = 0; i < 10; i++) {
 						Trie child = actualTrie.childs[i];
-						if (child != null && child.minPath < min) {
+						if (child.minPath < min) {
 							min = child.minPath;
 							indexMin = i;
 						}
 					}
-					System.out.print(indexMin);
+					bw.write(indexMin);
+					//System.out.print(indexMin);
 					actualTrie = actualTrie.childs[indexMin];
 				}
-				min = Integer.MAX_VALUE;
-				indexMin = -1;
 				for (int i = 0; i < 10; i++) {
 					Trie child = actualTrie.childs[i];
 					if (child == null || !child.set ) {
 						child = child == null? new Trie(actualTrie) : child;
 						child.set = true;
-						System.out.println(indexMin);
+						bw.write(i + "\n");
+						//System.out.println(indexMin);
 						actualTrie.childs [i] = child;
 						update(child);
 						return;

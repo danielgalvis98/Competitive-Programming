@@ -1,4 +1,4 @@
-
+package trie;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-public class TestClass {
+public class RegistrationSystem {
 	
 	static Trie root = new Trie(null);
 	static BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
@@ -17,7 +17,7 @@ public class TestClass {
 		int users = Integer.parseInt(lector.readLine());
 		for (int i = 0; i < users; i++) {
 			String userName = lector.readLine();
-			bw.write(userName);
+			bw.write(userName + "");
 			//System.out.print(userName);
 			addUser(userName);
 		}
@@ -91,7 +91,7 @@ public class TestClass {
 						indexMin = i;
 					}
 				}
-				bw.write(indexMin);
+				bw.write(indexMin + "");
 				//System.out.print(indexMin);
 				actualTrie = actualTrie.childs[indexMin];
 				min = Integer.MAX_VALUE;
@@ -104,7 +104,7 @@ public class TestClass {
 							indexMin = i;
 						}
 					}
-					bw.write(indexMin);
+					bw.write(indexMin + "");
 					//System.out.print(indexMin);
 					actualTrie = actualTrie.childs[indexMin];
 				}
@@ -113,7 +113,7 @@ public class TestClass {
 					if (child == null || !child.set ) {
 						child = child == null? new Trie(actualTrie) : child;
 						child.set = true;
-						bw.write(i + "\n");
+						bw.write("" + i + "\n");
 						//System.out.println(indexMin);
 						actualTrie.childs [i] = child;
 						update(child);

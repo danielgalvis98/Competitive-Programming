@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class TakeshiCastle {
 	static double L;
@@ -32,31 +35,37 @@ public class TakeshiCastle {
 		memo = new double [cases];
 		for (int i = 0; i < memo.length; i++) {
 			memo[i] = -1;
+				
 		}
-		//Hola que tal
 		double solution = prob(cases - 1);
-		DecimalFormat df = new DecimalFormat("##.######");
-		writer.write(df.format(solution));
+//		DecimalFormat def = new DecimalFormat("#.######");
+//		writer.write(def.format(solution));
+		writer.write(solution == -1 ? "IMPOSSIBLE" : solution + "");
 		reader.close();
 		writer.close();
 	}
 	
-	public static double prob(int position) {
-		if (position < 0) {
+	public static double prob(int position) {	
+		if (distances[position] <= L) {
+			return probabilities[position];
+		}
+		
+		if (position < 0 ) {
 			return 0;
 		}
 		double result = -1;
 		double actDist = distances [position];
-		int newPosition = position--;
-		while (actDist - distances[newPosition] <= L) {
+		int newPosition = position - 1;
+		while (newPosition >= 0 && actDist - distances[newPosition] <= L) {
 			double candidate;
 			if (memo[newPosition] == -1) {
-				candidate = prob(newPosition - 1);
+				candidate = prob(newPosition);
 				memo[newPosition] = candidate;
 			} else {
 				candidate = memo[newPosition];
 			}
-			result = Math.max(result, candidate);
+			result = probabilities [position] * Math.max(result, candidate);
+			newPosition--;
 		}
 		return result;
 	}

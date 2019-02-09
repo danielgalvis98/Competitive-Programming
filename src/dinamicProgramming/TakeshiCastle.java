@@ -22,52 +22,55 @@ public class TakeshiCastle {
 		
 		String [] initialData = reader.readLine().split(" ");
 		int cases = Integer.parseInt(initialData[0]);
-		L = Integer.parseInt(initialData[1]);
+		L = Double.parseDouble(initialData[1]);
+		double D = Double.parseDouble(initialData[2]);
 		String [] probas = reader.readLine().split(" ");
 		String [] dists = reader.readLine().split(" ");
 		
-		distances = new double [cases];
-		probabilities = new double [cases];
+		distances = new double [cases + 1];
+		probabilities = new double [cases + 1];
 		for (int i = 0; i < cases; i++) {
 			distances [i] = Double.parseDouble(dists[i]);
 			probabilities [i] = Double.parseDouble(probas[i]);
 		}
+		distances [cases] = D;
+		probabilities[cases] = 1;
 		memo = new double [cases];
 		for (int i = 0; i < memo.length; i++) {
 			memo[i] = -1;
 				
 		}
-		double solution = prob(cases - 1);
-//		DecimalFormat def = new DecimalFormat("#.######");
-//		writer.write(def.format(solution));
-		writer.write(solution == -1 ? "IMPOSSIBLE" : solution + "");
+		double solution = prob(cases);
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMinimumFractionDigits(6);
+		String result = nf.format(solution);
+		String correct = result.replace(',', '.');
+		writer.write(solution == 0 ? "IMPOSSIBLE" : correct);
 		reader.close();
 		writer.close();
 	}
 	
 	public static double prob(int position) {	
-		if (distances[position] <= L) {
+		if (distances [position] <= L) {
 			return probabilities[position];
 		}
 		
-		if (position < 0 ) {
-			return 0;
-		}
-		double result = -1;
-		double actDist = distances [position];
-		int newPosition = position - 1;
-		while (newPosition >= 0 && actDist - distances[newPosition] <= L) {
+		double result = 0;
+		
+		int actualPosition = position - 1;
+		while (actualPosition >= 0 && distances[position] - distances[actualPosition] <= L) {
 			double candidate;
-			if (memo[newPosition] == -1) {
-				candidate = prob(newPosition);
-				memo[newPosition] = candidate;
+			if (memo[actualPosition] == -1) {
+				candidate = prob(actualPosition);
+				memo[actualPosition] = candidate;
 			} else {
-				candidate = memo[newPosition];
+				candidate = memo[actualPosition];
 			}
-			result = probabilities [position] * Math.max(result, candidate);
-			newPosition--;
+			result = Math.max(result, candidate);
+			actualPosition--;
 		}
-		return result;
+		
+		return result * probabilities[position];
 	}
 
 }

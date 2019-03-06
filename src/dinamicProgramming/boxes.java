@@ -1,12 +1,13 @@
-//package dinamicProgramming;
+package dinamicProgramming;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 
-public class Main {
+public class boxes {
 	static int [] [] memo;
 
 	static box [] theBoxes;
@@ -18,9 +19,7 @@ public class Main {
 		while (N != 0) {
 			memo = new int [N][3006];
 			for (int i = 0; i < memo.length; i++) {
-				for (int j = 0; j < memo[0].length; j++) {
-					memo[i][j] = -1;
-				}
+				Arrays.fill(memo[i], -1);
 			}
 			theBoxes = new box [N];
 			for (int i = 0; i < N; i++) {
@@ -40,21 +39,16 @@ public class Main {
 		}
 		int max = -1;
 		for (int i = box + 1; i < theBoxes.length; i++) {
-			if (memo[i][maxW] != -1) {
-				max = Math.max(max, memo[i][maxW]);
-			} else {
 				box newBox = theBoxes[i];
 				if (newBox.weight <= maxW) {
 					int newMax = Math.min(newBox.maxLoad, maxW - newBox.weight);
 					int newStack = maxBoxes(i, newMax);
 					max = Math.max(max, newStack);
-					memo[i][maxW] = newStack;
 				}
 			}
+		if (box != -1) {
+			memo[box][maxW] = max + 1;	
 		}
-//		if (box != -1) {
-//			memo[box][max]
-//		}
 		return max + 1;
 	}
 

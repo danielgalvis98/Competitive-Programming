@@ -35,13 +35,25 @@ public class harmonious {
             node2.adj.add(node1);
         }
 
+        int addEdges = 0;
+        int max = Integer.MIN_VALUE;
+        for (int i = 1; i <= n; i++){
+            node act = nodes[i];
+            if (!act.visited){
+                if (i < max)
+                    addEdges++;
+                int bfsMax = bfs(act);
+                max = Math.max(bfsMax, max);
+            }
+        }
 
+        bw.write(addEdges + "\n");
 
         bw.close();
     }
 
     static int bfs (node theNode){
-        int totNodes = 0;
+        int max = 0;
         min = Integer.MAX_VALUE;
         max = Integer.MIN_VALUE;
         theNode.visited = true;
@@ -49,9 +61,7 @@ public class harmonious {
         cola.add(theNode);
         while(!cola.isEmpty()){
             node act = cola.poll();
-            min = Math.min(min, act.id);
             max = Math.max(max, act.id);
-            totNodes++;
             for (node adj : act.adj){
                 if (!adj.visited){
                     adj.visited = true;
@@ -59,7 +69,7 @@ public class harmonious {
                 }
             }
         }
-        return totNodes;
+        return max;
     }
 }
 

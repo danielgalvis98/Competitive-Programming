@@ -14,6 +14,7 @@ public class oppositeParity {
     static int [] memo;
     static int [] arr;
     static int n;
+    
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));

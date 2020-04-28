@@ -13,6 +13,12 @@ typedef pair<int, int> ii;
 
 int main()
 {
+    #ifdef LOCAL
+        freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
+    #else
+        #define endl '\n'
+    #endif
 
     return 0;
 }

@@ -11,8 +11,17 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> ii;
 
+int olakace(){
+    
+} 
+
 int main()
 {
+    #ifdef LOCAL
+        freopen("input.txt", "r", stdin);
+    #else
+        #define endl '\n'
+    #endif
 
     string s;
     cin >> s;

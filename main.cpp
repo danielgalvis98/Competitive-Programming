@@ -19,12 +19,9 @@ int main()
 {
     #ifdef LOCAL
         freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
     #else
         #define endl '\n'
     #endif
-
-    string s;
-    cin >> s;
-    cout << s;
     return 0;
 }

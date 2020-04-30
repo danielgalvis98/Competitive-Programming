@@ -19,9 +19,13 @@ int main()
 {
     #ifdef LOCAL
         freopen("input.txt", "r", stdin);
-        freopen("output.txt", "w", stdout);
+        //freopen("output.txt", "w", stdout);
     #else
         #define endl '\n'
     #endif
+    string a [3] = {"a", "$", "_"};
+    sort(a, a+3);
+    fore(i,0,3)
+        cout << a[i];
     return 0;
 }

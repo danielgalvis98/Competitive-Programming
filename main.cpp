@@ -11,10 +11,6 @@ typedef long long int ll;
 typedef vector<int> vi;
 typedef pair<int, int> ii;
 
-int olakace(){
-    
-} 
-
 int main()
 {
     #ifdef LOCAL
@@ -23,9 +19,6 @@ int main()
     #else
         #define endl '\n'
     #endif
-    string a [3] = {"a", "$", "_"};
-    sort(a, a+3);
-    fore(i,0,3)
-        cout << a[i];
+
     return 0;
 }

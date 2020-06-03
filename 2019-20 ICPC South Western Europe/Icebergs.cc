@@ -34,28 +34,9 @@ struct pt {  // for 3D add z coordinate
 	pt rot(double a){return rot(pt(sin(a),cos(a)));}
 };
 
-// CCW order
-// Includes collinear points (change sign of EPS in left to exclude)
-vector<pt> chull(vector<pt> p){
-	vector<pt> r;
-	sort(p.begin(),p.end()); // first x, then y
-	fore(i,0,p.size()){ // lower hull
-		while(r.size()>=2&&r.back().left(r[r.size()-2],p[i]))r.pop_back();
-		r.pb(p[i]);
-	}
-	r.pop_back();
-	int k=r.size();
-	for(int i=p.size()-1;i>=0;--i){ // upper hull
-		while(r.size()>=k+2&&r.back().left(r[r.size()-2],p[i]))r.pop_back();
-		r.pb(p[i]);
-	}
-	r.pop_back();
-	return r;
-}
 
 double polygonArea(vector<pt> p){
         int n = SZ(p);
-        p = chull(p);
 		double r=0.;
 		fore(i,0,n)r+=p[i]%p[(i+1)%n];
 		return abs(r)/2; // negative if CW, positive if CCW

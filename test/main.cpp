@@ -1,60 +1,87 @@
-#include<bits/stdc++.h>
-#include<iostream>
+#include <bits/stdc++.h>
+#define ff first
+#define ss second
+#define fore(i,a,b) for(int i=a,colchin=b;i<colchin;++i)
+#define pb push_back
+#define ALL(s) s.begin(),s.end()
+#define FIN ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define sz(s) int(s.size())
+
 using namespace std;
-#define fre 	freopen("input-1.txt","r",stdin),freopen("output-1.txt","w",stdout)
-#define abs(x) ((x)>0?(x):-(x))
-#define M 1000000007
-#define lld signed long long int
-#define pp pop_back()
-#define ps(x) push_back(x)
-#define mpa make_pair
-#define pii pair<int,int>
-#define fi first
-#define se second
-#define scan(x) scanf("%d",&x)
-#define print(x) printf("%d\n",x)
-#define scanll(x) scanf("%lld",&x)
-#define printll(x) printf("%lld\n",x)
-#define boost ios_base::sync_with_stdio(0)
-//vector<int> g[2*100000+5];int par[2*100000+5];
-lld dp[1048576+5][22];
-int freq[1048576+5];
-int d[1000000+5];
-int main()
-{
-	 freopen("input-6.txt","r",stdin),
-	freopen("output-6.txt","w",stdout);
-	int t;
-	cin>>t;
-	while(t--)
-	{
-		int n,x,mask;
-		cin>>n;
-		for(int i=1;i<=n;++i)
-		{
-			scan(d[i]);
-			freq[d[i]]++;
-		}
-		lld ans=0;
-		for(int mask=0;mask<(1ll<<20);++mask)
-		{
-			dp[mask][0]=freq[mask];
-			if(mask&1)
-				dp[mask][0]+=freq[mask^1];
-			for(int p=1;p<=20;++p)
-			{
-				dp[mask][p]=dp[mask][p-1];
-				if(mask&(1<<p))
-				{
-					dp[mask][p]+=dp[mask^(1<<p)][p-1];
-				}
-			}
-		}
-		for(int i=1;i<=n;++i)
-		{
-			ans+=dp[(1ll<<20)-1-d[i]][20];
-			freq[d[i]]=0;
-		}
-		cout<<ans<<endl;
-	}
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+typedef long long ll;
+typedef pair<ll,ll> ii;
+struct Comp {
+  bool operator()(const std::pair<ll, ll> &a, const std::pair<ll, ll> &b) {
+    if (a.first != b.first) {
+      return a.first > b.first;
+    }
+    return a.second < b.second;
+  }
+
+};
+typedef tree < ii ,  string ,  Comp ,  rb_tree_tag ,  tree_order_statistics_node_update > ordered_set;
+
+int main(){FIN;
+    ll cnt_id=0;
+    int N; cin>>N;
+    map<string,ii> mp;
+    ordered_set ordSet;
+    while(N--){
+        string comand,code; cin>>comand;
+        if(comand == "ISSUE"){
+            cin>>code;
+            auto it = mp.find(code);
+            if(it == mp.end()){
+                mp[code]={cnt_id,0};
+                ordSet[{0,cnt_id}]=code;
+                cout<<"CREATED "<<cnt_id<<" 0\n";
+                cnt_id++;
+            }else{
+                ii curr= it->second ;
+                cout<<"EXISTS "<<curr.ff<<" "<<curr.ss<<"\n";
+            }
+        }else if(comand=="DELETE"){
+            cin>>code;
+            auto it = mp.find(code);
+            if(it == mp.end()){
+
+                cout<<"BAD REQUEST\n";
+            }else{
+                ii curr= it ->second ;
+                mp.erase(it);
+                auto it2 = ordSet.find({curr.ss,curr.ff});
+                ordSet.erase(it2);
+                cout<<"OK "<<curr.ff<<" "<<curr.ss<<"\n";
+            }
+        }else if(comand =="RELIABILITY"){
+            cin>>code;
+            ll m; cin>>m;
+            auto it = mp.find(code);
+            if(it == mp.end()){
+                cout<<"BAD REQUEST\n";
+            }else{
+                ii curr= it ->second ;
+                ii newP= {curr.ff,curr.ss+m};
+                mp.erase(it);
+                mp[code]=newP;
+                auto it2 = ordSet.find({curr.ss,curr.ff});
+                ordSet.erase(it2);
+                ordSet[{newP.ss, newP.ff}]=code;
+                cout<<"OK "<<newP.ff<<" "<<newP.ss<<"\n";
+            }
+        }else if(comand == "FIND"){
+            int kth; cin>>kth;
+            if(sz(mp)==0){
+                cout<<"EMPTY\n";
+            }else{
+                kth=min(kth,sz(ordSet)-1);
+                auto found= ordSet.find_by_order(kth);
+                cout<<"OK "<<found->second<<" "<<(found->first).ss<<" "<<(found->first).ff<<"\n";
+            }
+        }
+    }
+    return 0;
 }
